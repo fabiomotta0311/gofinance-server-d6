@@ -33,22 +33,14 @@ transactionsRouter.post('/', async (request, response) => {
     category,
   });
 
-  const transactionReturn = {
-    id: transaction.id,
-    title,
-    value,
-    type,
-    category,
-  };
-
-  return response.json(transactionReturn);
+  return response.json(transaction);
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
   // TODO
   const { id } = request.params;
   const deleteTransaction = new DeleteTransactionService();
-  await deleteTransaction.execute({ id });
+  await deleteTransaction.execute(id);
   return response.status(204).send();
 });
 

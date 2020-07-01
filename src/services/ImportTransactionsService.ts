@@ -39,7 +39,7 @@ class ImportTransactionsService {
 
       categories.push(category);
 
-      transactions.push({ title, type, value, category });
+      transactions.push({ title, type, value: parseFloat(value), category });
     });
 
     await new Promise(resolve => parseCSV.on('end', resolve));

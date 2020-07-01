@@ -2,11 +2,8 @@ import { getCustomRepository } from 'typeorm';
 import TransactionRepository from '../repositories/TransactionsRepository';
 import AppError from '../errors/AppError';
 
-interface Request {
-  id: string;
-}
 export default class DeleteTransactionService {
-  public async execute({ id }: Request): Promise<void> {
+  public async execute(id: string): Promise<void> {
     // TODO
     const transactionRepository = getCustomRepository(TransactionRepository);
     const findTransactionById = await transactionRepository.findOne(id);
