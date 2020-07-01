@@ -3,6 +3,7 @@ import { getRepository, getCustomRepository } from 'typeorm';
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
+import AppError from '../errors/AppError';
 
 interface RequestDTO {
   title: string;
@@ -24,13 +25,13 @@ export default class CreateTransactionService {
     );
 
     if (!['income', 'outcome'].includes(type)) {
-      throw new Error('Transaction type is invalid');
+      throw new AppError('Transaction type is invalid', 500);
     }
 
     const { total } = await transactionRepository.getBalance();
 
     if (type === 'outcome' && total < value) {
-      throw new Error('You do not have enough balance');
+      throw new AppError('You do not have enough balance', 400);
     }
 
     const categoryRepository = getRepository(Category);

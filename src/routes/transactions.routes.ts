@@ -14,9 +14,12 @@ const upload = multer(uploadConfig);
 
 transactionsRouter.get('/', async (request, response) => {
   // TODO
-  const transactionRepository = getCustomRepository(TransactionsRepository);
-  const transactions = await transactionRepository.find();
-  return response.json(transactions);
+  const transactionsRepository = getCustomRepository(TransactionsRepository);
+
+  const transactions = await transactionsRepository.find();
+  const balance = await transactionsRepository.getBalance();
+
+  return response.json({ transactions, balance });
 });
 
 transactionsRouter.post('/', async (request, response) => {
@@ -54,9 +57,8 @@ transactionsRouter.post(
   upload.single('file'),
   async (request, response) => {
     // TODO
-    const { filename } = request.file;
     const importTransaction = new ImportTransactionsService();
-    const transactions = await importTransaction.execute({ csvFile: filename });
+    const transactions = await importTransaction.execute(request.file.path);
     return response.json(transactions);
   },
 );
